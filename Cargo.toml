@@ -1,0 +1,57 @@
+[package]
+name = "xxx"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+embassy-embedded-hal = { version = "0.1.0", path = "/opt/embassy/embassy-embedded-hal", features = ["defmt"] }
+embassy-sync = { version = "0.2.0", path = "/opt/embassy/embassy-sync", features = ["defmt"] }
+embassy-executor = { version = "0.2.0", path = "/opt/embassy/embassy-executor", features = ["nightly", "arch-cortex-m", "executor-thread", "executor-interrupt", "defmt", "integrated-timers"] }
+embassy-time = { version = "0.1.1", path = "/opt/embassy/embassy-time", features = ["nightly", "unstable-traits", "defmt", "defmt-timestamp-uptime"] }
+embassy-rp = { version = "0.1.0", path = "/opt/embassy/embassy-rp", features = ["defmt", "unstable-traits", "nightly", "unstable-pac", "time-driver", "critical-section-impl"] }
+
+static_cell = { version = "1.1", features = ["nightly"]}
+
+
+[dependencies.cortex-m]
+version = "0.7.7"
+features = ["inline-asm"]
+
+[dependencies.cortex-m-rt]
+version = "0.7.3"
+
+[dependencies.byte-slice-cast]
+version = "1.2.0"
+default-features = false
+
+[dependencies.defmt]
+version = "0.3"
+
+[dependencies.defmt-rtt]
+version = "0.4"
+
+[dependencies.futures]
+version = "0.3.28"
+default-features = false
+features = ["async-await"]
+
+[dependencies.embedded-hal-1]
+package = "embedded-hal"
+version = "=1.0.0-alpha.10"
+
+
+
+[dependencies.display-interface]
+version = "0.4.1"
+
+[dependencies.embedded-graphics]
+version = "0.7.1"
+[dependencies.st7789]
+version = "0.6.1"
+
+# [dependencies.embedded-graphics]
+# version = "0.8.1"
+# [dependencies.mipidsi]
+# version = "0.6.0"
