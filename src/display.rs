@@ -6,13 +6,14 @@ use embassy_rp::peripherals::*;
 use embassy_rp::pwm::Pwm;
 use embassy_rp::spi::Spi;
 use embassy_time::{Delay, Duration, Timer};
-use embedded_graphics::prelude::Primitive;
 use embedded_graphics::{
     pixelcolor::Rgb565,
     prelude::{Point, RgbColor, Size},
     primitives::{PrimitiveStyleBuilder, Rectangle},
     Drawable,
 };
+
+use embedded_graphics::prelude::Primitive;
 
 use crate::idisplay::SPIDeviceInterface;
 
@@ -45,21 +46,27 @@ impl NewScreen {
     ) {
         let rst = Output::new(rst, Level::High);
 
-        use st7789::Orientation;
-        let mut display: st7789::ST7789<
-            SPIDeviceInterface<
-                SpiDeviceWithConfig<
-                    CriticalSectionRawMutex,
-                    Spi<'static, SPI0, embassy_rp::spi::Async>,
-                    Output<'static, PIN_5>,
-                >,
-                Output<'static, PIN_7>,
-            >,
-            Output<'static, PIN_6>,
-        > = st7789::ST7789::new(di, rst, SCREEN_Y_PX, SCREEN_X_PX);
+        // OLD
+        // use st7789::Orientation;
+        // let mut display: st7789::ST7789<SPIDeviceInterface<SpiDeviceWithConfig
+        //                     <CriticalSectionRawMutex, Spi<'static, SPI0, embassy_rp::spi::Async>,
+        //                     Output<'static, PIN_5>>, Output<'static, PIN_7>>,
+        //                     Output<'static, PIN_6>>
+        //     = st7789::ST7789::new(di, rst, SCREEN_Y_PX, SCREEN_X_PX);
 
-        display.init(&mut Delay).unwrap();
-        display.set_orientation(Orientation::Landscape).unwrap();
+        //     display.init(&mut Delay).unwrap();
+        //     display.set_orientation(Orientation::Landscape).unwrap();
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // NEW
+        use mipidsi::Orientation;
+        let mut display = mipidsi::Builder::st7789(di)
+            .init(&mut Delay, Some(rst))
+            .unwrap();
+        display
+            .set_orientation(Orientation::Landscape(false))
+            .unwrap();
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
 
         loop {
             match FRAMES.try_recv() {
@@ -74,7 +81,15 @@ impl NewScreen {
     }
 }
 
-pub type DisplayT = st7789::ST7789<
+// pub type DisplayT = st7789::ST7789<SPIDeviceInterface<
+//                                     SpiDeviceWithConfig<'static, CriticalSectionRawMutex,
+//                                                                     Spi<'static, embassy_rp::peripherals::SPI0,
+//                                                                         embassy_rp::spi::Async>,
+//                                                                     Output<'static, embassy_rp::peripherals::PIN_5>>,
+//                                                                     Output<'static, embassy_rp::peripherals::PIN_7>>,
+//                                     Output<'static, embassy_rp::peripherals::PIN_6>>;
+
+pub type DisplayT = mipidsi::Display<
     SPIDeviceInterface<
         SpiDeviceWithConfig<
             'static,
@@ -84,6 +99,7 @@ pub type DisplayT = st7789::ST7789<
         >,
         Output<'static, embassy_rp::peripherals::PIN_7>,
     >,
+    mipidsi::models::ST7789,
     Output<'static, embassy_rp::peripherals::PIN_6>,
 >;
 

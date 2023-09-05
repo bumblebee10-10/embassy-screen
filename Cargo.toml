@@ -46,12 +46,12 @@ version = "=1.0.0-alpha.10"
 [dependencies.display-interface]
 version = "0.4.1"
 
-[dependencies.embedded-graphics]
-version = "0.7.1"
-[dependencies.st7789]
-version = "0.6.1"
-
 # [dependencies.embedded-graphics]
-# version = "0.8.1"
-# [dependencies.mipidsi]
-# version = "0.6.0"
+# version = "0.7.1"
+# [dependencies.st7789]
+# version = "0.6.1"
+
+[dependencies.embedded-graphics]
+version = "0.8.1"
+[dependencies.mipidsi]
+version = "0.6.0"
